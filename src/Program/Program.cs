@@ -2,42 +2,56 @@
 using WeatherMonitoringStation.Library.Displays.Observers;
 using WeatherMonitoringStation.Library.Factories;
 
-namespace WeatherMonitoringStation.Program;
-
-class Program
+namespace WeatherMonitoringStation.Program
 {
-    static void Main()
+    class Program
     {
-        var data = WeatherData.Instance;
+        static void Main()
+        {
+            // Get the singleton instance of WeatherData
+            var data = WeatherData.Instance;
 
-        var statisticData = WeatherStation.GetDisplay(DisplayType.Statistics);
-        var forecastData = WeatherStation.GetDisplay(DisplayType.Forcast);
-        var conditionData = WeatherStation.GetDisplay(DisplayType.CurrentConditions);
+            // Create display objects for statistics, forecast, and current conditions
+            var statisticData = WeatherStation.GetDisplay(DisplayType.Statistics);
+            var forecastData = WeatherStation.GetDisplay(DisplayType.Forcast);
+            var conditionData = WeatherStation.GetDisplay(DisplayType.CurrentConditions);
 
-        data.Subscribe(statisticData);
-        data.Subscribe(forecastData);
-        data.Subscribe(conditionData);
+            // Subscribe the display objects to the WeatherData instance
+            data.Subscribe(statisticData);
+            data.Subscribe(forecastData);
+            data.Subscribe(conditionData);
 
-        data.GenerateNewData();
+            // Generate new weather data
+            data.GenerateNewData();
 
-        data.Unsubscribe(statisticData);
-        data.Unsubscribe(forecastData);
-        data.Unsubscribe(conditionData);
+            // Unsubscribe the display objects from the WeatherData instance
+            data.Unsubscribe(statisticData);
+            data.Unsubscribe(forecastData);
+            data.Unsubscribe(conditionData);
 
-        var conditionAndStatistic = new CurrentConditionsDisplay(statisticData);
+            // Create a CurrentConditionsDisplay object that wraps the statisticData display
+            var conditionAndStatistic = new CurrentConditionsDisplay(statisticData);
 
-        data.Subscribe(conditionAndStatistic);
+            // Subscribe the new display object to the WeatherData instance
+            data.Subscribe(conditionAndStatistic);
 
-        data.GenerateNewData();
+            // Generate new weather data
+            data.GenerateNewData();
 
-        data.Unsubscribe(conditionAndStatistic);
+            // Unsubscribe the new display object from the WeatherData instance
+            data.Unsubscribe(conditionAndStatistic);
 
-        var conditionAndForecast = new CurrentConditionsDisplay(forecastData);
+            // Create a CurrentConditionsDisplay object that wraps the forecastData display
+            var conditionAndForecast = new CurrentConditionsDisplay(forecastData);
 
-        data.Subscribe(conditionAndForecast);
+            // Subscribe the new display object to the WeatherData instance
+            data.Subscribe(conditionAndForecast);
 
-        data.GenerateNewData();
+            // Generate new weather data
+            data.GenerateNewData();
 
-        data.Unsubscribe(conditionAndForecast);
+            // Unsubscribe the new display object from the WeatherData instance
+            data.Unsubscribe(conditionAndForecast);
+        }
     }
 }

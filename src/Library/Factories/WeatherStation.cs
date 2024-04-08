@@ -1,29 +1,39 @@
 using WeatherMonitoringStation.Library.Displays.Interfaces;
 using WeatherMonitoringStation.Library.Displays.Observers;
 
-namespace WeatherMonitoringStation.Library.Factories;
-
-public enum DisplayType
+namespace WeatherMonitoringStation.Library.Factories
 {
-    CurrentConditions,
-    Statistics,
-    Forcast
-}
-
-public class WeatherStation
-{
-    public static IDisplay GetDisplay(DisplayType displayType)
+    /// <summary>
+    /// The 'DisplayType' enumeration lists the types of displays available.
+    /// </summary>
+    public enum DisplayType
     {
-        switch (displayType)
+        CurrentConditions,
+        Statistics,
+        Forcast
+    }
+
+    /// <summary>
+    /// The 'WeatherStation' class is responsible for creating display objects.
+    /// </summary>
+    public class WeatherStation
+    {
+        /// <summary>
+        /// The 'GetDisplay' method takes a 'DisplayType' enumeration as a parameter.
+        /// It returns an 'IDisplay' object based on the 'DisplayType' parameter.
+        /// </summary>
+        /// <param name="displayType">An enumeration of 'DisplayType' which specifies the type of display to be created.</param>
+        /// <returns>An 'IDisplay' object of the specified type.</returns>
+        /// <exception cref="ArgumentException">Thrown when an invalid display type is provided.</exception>
+        public static IDisplay GetDisplay(DisplayType displayType)
         {
-            case DisplayType.CurrentConditions:
-                return new CurrentConditionsDisplay();
-            case DisplayType.Statistics:
-                return new StatisticsDisplay();
-            case DisplayType.Forcast:
-                return new ForecastDisplay();
-            default:
-                throw new ArgumentException("Invalid display type!");
+            return displayType switch
+            {
+                DisplayType.CurrentConditions => new CurrentConditionsDisplay(),
+                DisplayType.Statistics => new StatisticsDisplay(),
+                DisplayType.Forcast => new ForecastDisplay(),
+                _ => throw new ArgumentException("Invalid display type!"),
+            };
         }
     }
 }
